@@ -18,4 +18,6 @@ void main(){
     {
         puts(V[i]);
     }
+
+    free(V);
 }
