@@ -20,7 +20,7 @@ typedef struct Cliente Cliente;
 
 float precioProducto(Producto P);
 int main(){
-    char *TiposProductos[]={"Galletas","Snack","Cigarrillos","Caramelos","Bebidas"};
+    char *TiposProductos[]={"Galletas","Snack","Cigarrillos","Caramelos","Bebidas"}, *BuffCliente, *BuffProducto;
     int random,cantidad;
     srand(time(NULL));
     Cliente *Clientes;
@@ -35,20 +35,26 @@ int main(){
     //Cargado de Clientes 
     for(int i=0;i<cantidad;i++){
         TotalPorCliente=0;
-        Clientes[i].NombreCliente = (char *)malloc(30);
+        BuffCliente = (char *)malloc(30);
         Clientes[i].ClienteID = i+1;
         printf("Ingrese el nombre del cliente %d: ",i+1);
-        gets(Clientes[i].NombreCliente);
+        gets(BuffCliente);
+        Clientes[i].NombreCliente=(char *)malloc(strlen(BuffCliente)+1);
+        strcpy(Clientes[i].NombreCliente, BuffCliente);
+        free(BuffCliente);
         Clientes[i].CantidadDeProductos = rand () % 5 + 1;
         Clientes[i].Productos=(Producto *)malloc(Clientes[i].CantidadDeProductos * sizeof(Producto));
         for(int j=0;j<Clientes[i].CantidadDeProductos;j++){
             precioPorProducto=0;
-            Clientes[i].Productos[j].TipoProducto=(char *)malloc(15);
+            BuffProducto=(char *)malloc(15);
             random = rand () % 5;
             Clientes[i].Productos[j].ProductoID=j+1;
             Clientes[i].Productos[j].PrecioUnitario=rand () % 91 + 10;
             Clientes[i].Productos[j].Cantidad=rand () % 10 + 1;
-            strcpy(Clientes[i].Productos[j].TipoProducto,TiposProductos[random]);
+            strcpy(BuffProducto,TiposProductos[random]);
+            Clientes[i].Productos[j].TipoProducto=(char *)malloc(strlen(BuffProducto)+1);
+            strcpy(Clientes[i].Productos[j].TipoProducto,BuffProducto);
+            free(BuffProducto);
             precioPorProducto=precioProducto(Clientes[i].Productos[j]);
             TotalPorCliente=TotalPorCliente+precioPorProducto;
         }
